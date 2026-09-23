@@ -1,15 +1,5 @@
-// =============================================================
-// engine/search/search-utils.js
-// Ferramentas compartilhadas por Custo Uniforme, Gulosa e A*.
-// (BFS e DFS não precisam de fila de prioridade: usam fila comum e
-// pilha, respectivamente, com arrays normais do JS.)
-// =============================================================
-
 import { HEURISTIC_TYPE } from '../../config.js';
 
-// Implementação simples (reordena o array a cada inserção, não é um
-// heap binário de verdade). Para os tamanhos de grid dessa atividade
-// (centenas de células) o desempenho é mais que suficiente.
 export class PriorityQueue {
   constructor() {
     this.items = []; // cada item: { element, priority }

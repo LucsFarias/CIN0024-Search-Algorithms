@@ -4,8 +4,7 @@
 // pelos algoritmos de busca (dinâmico, resetado a cada nova busca).
 //
 // Nota sobre p5 em "instance mode": como estamos dentro do React,
-// não existem funções globais como fill()/rect() (isso só existe no
-// "global mode" do p5, usado no editor.p5js.org). Por isso os métodos
+// não existem funções globais como fill()/rect(). Por isso os métodos
 // de desenho recebem `p` (a instância do p5) e chamam p.fill(), p.rect()
 // etc.
 // =============================================================

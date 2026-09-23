@@ -1,15 +1,11 @@
 // =============================================================
-// engine/search/dfs.js — Busca em Profundidade (Depth-First Search)
 //
-// DICA: é praticamente idêntica ao bfs.js, com UMA diferença:
+// É praticamente idêntica ao bfs.js, com UMA diferença:
 // - BFS usa `frontier.shift()` (remove do INÍCIO -> fila, FIFO)
 // - DFS usa `frontier.pop()`   (remove do FIM -> pilha, LIFO)
 //
 // Copiem a estrutura de bfs.js e troquem shift() por pop() como
-// ponto de partida — vocês vão notar que o DFS "mergulha" fundo em
-// uma direção antes de voltar, bem diferente do padrão "em ondas" do BFS.
-// =============================================================
-
+// ponto de partida
 import { reconstructPath } from './search-utils.js';
 
 export function* dfs(grid, startCell, goalCell) {

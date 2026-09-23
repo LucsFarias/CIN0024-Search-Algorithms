@@ -1,9 +1,3 @@
-// =============================================================
-// engine/Grid.js
-// O ambiente inteiro: matriz ROWS x COLS de Cell. Gera o mapa
-// aleatório e desenha todas as células.
-// =============================================================
-
 import Cell from './Cell.js';
 import { ROWS, COLS, TERRAIN, TERRAIN_PROBABILITY } from '../config.js';
 
@@ -14,10 +8,10 @@ export default class Grid {
   }
 
   // Gera um novo mapa sorteando o terreno de cada célula de acordo com
-  // TERRAIN_PROBABILITY. É uma geração "ruído branco" (célula a célula,
-  // independente). Se quiserem mapas mais "naturais" (lagos e obstáculos
-  // em blocos, em vez de pixels espalhados), pesquisem sobre Perlin
-  // Noise — o p5 tem p.noise() pronto pra isso. Fica como melhoria.
+  // TERRAIN_PROBABILITY. É uma geração célula a célula,
+  // independente. Se quisermos mapas mais "naturais" (lagos e obstáculos
+  // em blocos, em vez de pixels espalhados), pesquisar sobre Perlin
+  // Noise — o p5 tem p.noise() pronto pra isso. Alguém pode ficar com isso
   generate() {
     this.cells = [];
     for (let row = 0; row < ROWS; row++) {
