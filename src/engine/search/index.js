@@ -12,11 +12,13 @@ import { greedy } from './greedy.js';
 import { astar } from './astar.js';
 
 export const ALGORITHMS = {
-  bfs: { label: 'Largura (BFS)', run: bfs },
-  dfs: { label: 'Profundidade (DFS)', run: dfs },
-  ucs: { label: 'Custo Uniforme (UCS)', run: ucs },
-  greedy: { label: 'Gulosa (Greedy)', run: greedy },
-  astar: { label: 'A*', run: astar },
+  bfs: { label: 'Largura (BFS)', run: bfs, implemented: true },
+  dfs: { label: 'Profundidade (DFS)', run: dfs, implemented: false },
+  ucs: { label: 'Custo Uniforme (UCS)', run: ucs, implemented: false },
+  greedy: { label: 'Gulosa (Greedy)', run: greedy, implemented: false },
+  astar: { label: 'A*', run: astar, implemented: false },
 };
 
-export const DEFAULT_ALGORITHM = 'astar';
+// BFS é o único totalmente implementado — é o que abre selecionado por
+// padrão, pra ninguém cair sem querer num algoritmo que ainda é só TODO.
+export const DEFAULT_ALGORITHM = 'bfs';

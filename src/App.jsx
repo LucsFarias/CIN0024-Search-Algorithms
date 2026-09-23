@@ -20,6 +20,9 @@ export default function App() {
 
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(DEFAULT_ALGORITHM);
   const [foodsCollected, setFoodsCollected] = useState(0);
+  // Espelha o estado de autoplay do sketch p5 só pra pintar o botão
+  // certo na tela (o valor "de verdade" mora dentro do sketch).
+  const [isAutoPlay, setIsAutoPlay] = useState(false);
 
   const handleFoodCollected = useCallback(() => {
     setFoodsCollected((count) => count + 1);
@@ -44,6 +47,20 @@ export default function App() {
     setFoodsCollected(0);
   }
 
+  function handleToggleAutoPlay() {
+    const next = !isAutoPlay;
+    setIsAutoPlay(next);
+    p5InstanceRef.current?.setAutoPlay(next);
+  }
+
+  function handleStepOnce() {
+    p5InstanceRef.current?.stepOnce();
+  }
+
+  function handleFinishSearch() {
+    p5InstanceRef.current?.finishSearchInstantly();
+  }
+
   return (
     <div className="flex min-h-screen flex-col items-center gap-4 bg-neutral-900 p-6">
       <h1 className="text-xl font-semibold text-neutral-100">
@@ -55,6 +72,10 @@ export default function App() {
         onAlgorithmChange={handleAlgorithmChange}
         onRestart={handleRestart}
         foodsCollected={foodsCollected}
+        isAutoPlay={isAutoPlay}
+        onToggleAutoPlay={handleToggleAutoPlay}
+        onStepOnce={handleStepOnce}
+        onFinishSearch={handleFinishSearch}
       />
 
       <SimulationCanvas containerRef={containerRef} />

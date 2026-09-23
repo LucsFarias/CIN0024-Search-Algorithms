@@ -95,6 +95,22 @@ propósito, porque ele precisa re-renderizar a UI (o número na tela).
 Reiniciar o programa (botão "Reiniciar") sempre gera um mapa novo — cobre
 o requisito de demonstrar adaptabilidade.
 
+### Controles de passo a passo da busca
+
+A busca **começa pausada** por padrão, pra dar tempo de estudar cada passo
+(fronteira e visitados) antes de qualquer coisa acontecer:
+
+- **⏭ Passo seguinte** — avança exatamente uma célula expandida da busca.
+- **▶/⏸ Autoplay** — liga/desliga o avanço automático (como era antes,
+  a ~60 passos por segundo).
+- **⏩ Concluir busca** — pula direto pro resultado final, sem animar (útil
+  quando não se quer ver passo a passo naquele momento).
+
+Esses controles funcionam com qualquer algoritmo selecionado, mas hoje só
+fazem sentido de verdade no BFS, que é o único totalmente implementado —
+os outros (DFS, UCS, Gulosa, A*) ainda são esqueletos com `TODO`, então vão
+ficar "parados" na fronteira até serem implementados.
+
 ## Status da implementação
 
 - ✅ Estrutura React/Tailwind/p5, grid, agente, comida, movimento com

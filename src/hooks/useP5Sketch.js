@@ -46,6 +46,12 @@ export function useP5Sketch({ containerRef, algorithmRef, onFoodCollected }) {
     const sketch = (p) => {
       let grid, agent, food, state, searchGenerator;
 
+      // Controla se a busca avança sozinha a cada frame (autoplay) ou só
+      // quando o usuário clica em "Passo seguinte". Começa pausado (false)
+      // por padrão, pra dar tempo de estudar o primeiro passo antes de
+      // qualquer coisa se mover.
+      let isPlaying = false;
+
       p.setup = () => {
         p.createCanvas(COLS * CELL_SIZE, ROWS * CELL_SIZE);
         restart();
@@ -56,7 +62,7 @@ export function useP5Sketch({ containerRef, algorithmRef, onFoodCollected }) {
         grid.show(p);
 
         if (state === STATE.SEARCHING) {
-          stepSearch();
+          if (isPlaying) stepSearch();
         } else if (state === STATE.MOVING) {
           stepMovement();
         }
@@ -64,6 +70,29 @@ export function useP5Sketch({ containerRef, algorithmRef, onFoodCollected }) {
         food.show(p);
         agent.show(p);
       };
+
+      // --- Controles expostos para o React chamar de fora (ver App.jsx) ---
+
+      // Liga/desliga o avanço automático da busca (o "Autoplay" da UI)
+      p.setAutoPlay = (value) => {
+        isPlaying = value;
+      };
+
+      // Avança exatamente UM passo da busca (uma célula expandida),
+      // independente do autoplay estar ligado ou não — é o botão
+      // "Passo seguinte". Não faz nada se não estiver em busca no momento
+      // (ex: agente já está se movendo até a comida).
+      p.stepOnce = () => {
+        if (state === STATE.SEARCHING) stepSearch();
+      };
+
+      // Roda a busca inteira instantaneamente, sem animação — útil pra
+      // "pular" pro resultado final quando não se quer ver passo a passo.
+      p.finishSearchInstantly = () => {
+        while (state === STATE.SEARCHING) stepSearch();
+      };
+
+      p.isSearching = () => state === STATE.SEARCHING;
 
       // Passo 1 do ciclo: gera um novo mapa e reinicia a simulação.
       // Exposta em p.restartSimulation para o botão "Reiniciar" da UI
@@ -127,6 +156,16 @@ export function useP5Sketch({ containerRef, algorithmRef, onFoodCollected }) {
         }
       }
     };
+
+    // Corrige um efeito colateral do React StrictMode (só em desenvolvimento):
+    // ele monta/desmonta/remonta o componente de propósito pra pegar bugs de
+    // "cleanup", e isso pode deixar o canvas antigo meio "grudado" no DOM
+    // por uma fração de segundo antes do cleanup remover de fato. Limpando
+    // o container manualmente aqui garantimos que nunca sobra canvas duplicado,
+    // independente da ordem exata de mount/unmount do StrictMode.
+    if (containerRef.current) {
+      containerRef.current.innerHTML = '';
+    }
 
     const instance = new p5(sketch, containerRef.current);
     p5InstanceRef.current = instance;
