@@ -1,13 +1,3 @@
-// =============================================================
-// App.jsx
-// Orquestra o componente de controles (Tailwind/DOM comum) com o
-// canvas do p5 (via useP5Sketch). Guarda em state só o que precisa
-// re-renderizar a UI React (algoritmo escolhido, contador de comidas);
-// o resto (posições, estado da busca, etc.) vive dentro do sketch p5,
-// fora do ciclo de render do React — não faria sentido colocar 60
-// atualizações de posição por segundo no state do React.
-// =============================================================
-
 import { useRef, useState, useCallback } from 'react';
 import ControlsPanel from './components/ControlsPanel.jsx';
 import SimulationCanvas from './components/SimulationCanvas.jsx';
@@ -61,10 +51,11 @@ export default function App() {
     p5InstanceRef.current?.finishSearchInstantly();
   }
 
+  //TODO - Alterar o layout da tela para ficar mais bonito e responsivo, com o painel de controles à esquerda e a simulação à direita.
   return (
     <div className="flex min-h-screen flex-col items-center gap-4 bg-neutral-900 p-6">
       <h1 className="text-xl font-semibold text-neutral-100">
-        Agente Coletor de Comida — Estratégias de Busca
+        Agente Coletor de Comida — Search-Algorithms
       </h1>
 
       <ControlsPanel

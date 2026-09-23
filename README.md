@@ -128,20 +128,6 @@ ficar "parados" na fronteira até serem implementados.
 - Integrante 2 — responsabilidade
 - Integrante 3 — responsabilidade
 
-## Comandos de Git para começar
-
-```bash
-cd buscas-agentes-p5-react
-git init
-git add .
-git commit -m "Estrutura inicial do projeto (React + Tailwind + p5.js)"
-
-# criar o repositório no GitHub antes, depois:
-git remote add origin <URL_DO_SEU_REPOSITORIO>
-git branch -M main
-git push -u origin main
-```
-
 Sugestão de fluxo em grupo: cada integrante cria uma branch por
 funcionalidade (ex: `feature/dfs`, `feature/astar`) e abre um Pull Request
 para revisão antes de mesclar na `main` — evita conflitos e facilita saber

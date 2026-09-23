@@ -1,3 +1,5 @@
+//boy....a IA que fez essa parte, n me perguntem pfvr
+
 // =============================================================
 // hooks/useP5Sketch.js
 //

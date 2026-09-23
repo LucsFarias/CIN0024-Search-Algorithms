@@ -1,9 +1,8 @@
 // =============================================================
 // engine/Agent.js
-// O agente coletor. Posição em PIXELS (x, y) — não em linha/coluna —
-// porque ele se desloca suavemente entre células.
+// O agente coletor. Posição em PIXELS (x, y)
 //
-// A velocidade em cada trecho depende do custo do terreno de DESTINO:
+// A velocidade em cada trecho depende do custo do terreno de DESTINO: (n sei se vale a pena)
 // terreno caro (água) = anda devagar, terreno barato (areia) = rápido.
 // =============================================================
 

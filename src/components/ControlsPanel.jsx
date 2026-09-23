@@ -1,7 +1,6 @@
 // =============================================================
 // components/ControlsPanel.jsx
 // Select de algoritmo + botão de reiniciar + contador de comidas.
-// Recebe tudo via props — não tem estado próprio (fica no App.jsx).
 // =============================================================
 
 import { ALGORITHMS } from '../engine/search/index.js';

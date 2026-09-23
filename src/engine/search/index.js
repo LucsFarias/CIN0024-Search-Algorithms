@@ -19,6 +19,5 @@ export const ALGORITHMS = {
   astar: { label: 'A*', run: astar, implemented: false },
 };
 
-// BFS é o único totalmente implementado — é o que abre selecionado por
-// padrão, pra ninguém cair sem querer num algoritmo que ainda é só TODO.
+// BFS é o único totalmente implementado
 export const DEFAULT_ALGORITHM = 'bfs';
