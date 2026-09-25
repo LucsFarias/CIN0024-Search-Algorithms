@@ -1,9 +1,11 @@
 // =============================================================
 // components/ControlsPanel.jsx
 // Select de algoritmo + botão de reiniciar + contador de comidas.
+// Recebe tudo via props — não tem estado próprio (fica no App.jsx).
 // =============================================================
 
 import { ALGORITHMS } from '../engine/search/index.js';
+import { MIN_GRID_SIZE, MAX_GRID_SIZE } from '../config.js';
 
 export default function ControlsPanel({
   selectedAlgorithm,
@@ -14,6 +16,12 @@ export default function ControlsPanel({
   onToggleAutoPlay,
   onStepOnce,
   onFinishSearch,
+  rows,
+  cols,
+  onRowsChange,
+  onColsChange,
+  onApplyGridSize,
+  isUnreachable,
 }) {
   return (
     <div className="flex flex-wrap items-center gap-4 rounded-lg bg-neutral-800 px-4 py-3 shadow-md">
@@ -31,6 +39,39 @@ export default function ControlsPanel({
           ))}
         </select>
       </label>
+
+      <div className="flex items-center gap-2 rounded-md border border-neutral-600 bg-neutral-900/40 px-2 py-1">
+        <label className="flex items-center gap-1 text-sm text-neutral-200">
+          Linhas:
+          <input
+            type="number"
+            min={MIN_GRID_SIZE}
+            max={MAX_GRID_SIZE}
+            value={rows}
+            onChange={(e) => onRowsChange(Number(e.target.value))}
+            className="w-16 rounded-md border border-neutral-600 bg-neutral-700 px-2 py-1 text-sm text-neutral-50 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+        </label>
+        <label className="flex items-center gap-1 text-sm text-neutral-200">
+          Colunas:
+          <input
+            type="number"
+            min={MIN_GRID_SIZE}
+            max={MAX_GRID_SIZE}
+            value={cols}
+            onChange={(e) => onColsChange(Number(e.target.value))}
+            className="w-16 rounded-md border border-neutral-600 bg-neutral-700 px-2 py-1 text-sm text-neutral-50 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+        </label>
+        <button
+          type="button"
+          onClick={onApplyGridSize}
+          title={`Gera um mapa novo com esse tamanho (entre ${MIN_GRID_SIZE} e ${MAX_GRID_SIZE})`}
+          className="rounded-md bg-neutral-700 px-3 py-1.5 text-sm text-neutral-50 hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        >
+          Aplicar tamanho
+        </button>
+      </div>
 
       <button
         type="button"
@@ -82,6 +123,12 @@ export default function ControlsPanel({
         <span className="rounded-md bg-amber-900/40 px-2 py-1 text-xs text-amber-300">
           ⚠ Esse algoritmo ainda é só um esqueleto com TODO (veja
           src/engine/search/{selectedAlgorithm}.js) — a busca vai ficar parada na célula inicial até ser implementado.
+        </span>
+      )}
+
+      {isUnreachable && (
+        <span className="rounded-md bg-red-900/50 px-2 py-1 text-xs text-red-300">
+          ⚠ A comida ficou cercada de obstáculos e não tem caminho até o agente. Clique em "Reiniciar" pra sortear um mapa novo.
         </span>
       )}
     </div>

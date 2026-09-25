@@ -4,12 +4,13 @@
 // pelos algoritmos de busca (dinâmico, resetado a cada nova busca).
 //
 // Nota sobre p5 em "instance mode": como estamos dentro do React,
-// não existem funções globais como fill()/rect(). Por isso os métodos
+// não existem funções globais como fill()/rect() (isso só existe no
+// "global mode" do p5, usado no editor.p5js.org). Por isso os métodos
 // de desenho recebem `p` (a instância do p5) e chamam p.fill(), p.rect()
 // etc.
 // =============================================================
 
-import { TERRAIN, TERRAIN_COST, TERRAIN_COLOR, CELL_SIZE, ROWS, COLS, SEARCH_COLOR } from '../config.js';
+import { TERRAIN, TERRAIN_COST, TERRAIN_COLOR, CELL_SIZE, SEARCH_COLOR } from '../config.js';
 
 export default class Cell {
   constructor(row, col, type) {
@@ -43,7 +44,7 @@ export default class Cell {
     for (const [dRow, dCol] of deltas) {
       const r = this.row + dRow;
       const c = this.col + dCol;
-      if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
+      if (r >= 0 && r < grid.rows && c >= 0 && c < grid.cols) {
         neighbors.push(grid.getCell(r, c));
       }
     }

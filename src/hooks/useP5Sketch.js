@@ -1,5 +1,3 @@
-//boy....a IA que fez essa parte, n me perguntem pfvr
-
 // =============================================================
 // hooks/useP5Sketch.js
 //
@@ -21,10 +19,12 @@
 // depender do ciclo de re-render do React:
 //   - algorithmRef: React escreve (quando o usuário troca o <select>),
 //                    o sketch só LÊ, no momento de iniciar cada busca.
-//   - onFoodCollected: callback que o sketch CHAMA sempre que uma
-//                       comida é coletada, pra atualizar o contador
-//                       (esse sim vira um state lá no App, pois é
-//                       exibido na tela).
+//   - gridSizeRef: React escreve { rows, cols } (quando o usuário aplica
+//                   um novo tamanho de grid), o sketch só LÊ, no momento
+//                   de reiniciar (restart()).
+//   - onFoodCollected / onUnreachable: callbacks que o sketch CHAMA quando
+//                       uma comida é coletada ou fica inalcançável, pra
+//                       atualizar a UI (esses viram state lá no App).
 // =============================================================
 
 import { useEffect, useRef } from 'react';
@@ -32,7 +32,7 @@ import p5 from 'p5';
 import Grid from '../engine/Grid.js';
 import Agent from '../engine/Agent.js';
 import Food from '../engine/Food.js';
-import { COLS, ROWS, CELL_SIZE, SEARCH_STEPS_PER_FRAME } from '../config.js';
+import { CELL_SIZE, SEARCH_STEPS_PER_FRAME } from '../config.js';
 import { ALGORITHMS, DEFAULT_ALGORITHM } from '../engine/search/index.js';
 
 const STATE = {
@@ -41,7 +41,7 @@ const STATE = {
   NO_PATH: 'NO_PATH',
 };
 
-export function useP5Sketch({ containerRef, algorithmRef, onFoodCollected }) {
+export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCollected, onUnreachable }) {
   const p5InstanceRef = useRef(null);
 
   useEffect(() => {
@@ -55,7 +55,8 @@ export function useP5Sketch({ containerRef, algorithmRef, onFoodCollected }) {
       let isPlaying = false;
 
       p.setup = () => {
-        p.createCanvas(COLS * CELL_SIZE, ROWS * CELL_SIZE);
+        const { rows, cols } = gridSizeRef.current;
+        p.createCanvas(cols * CELL_SIZE, rows * CELL_SIZE);
         restart();
       };
 
@@ -97,10 +98,16 @@ export function useP5Sketch({ containerRef, algorithmRef, onFoodCollected }) {
       p.isSearching = () => state === STATE.SEARCHING;
 
       // Passo 1 do ciclo: gera um novo mapa e reinicia a simulação.
-      // Exposta em p.restartSimulation para o botão "Reiniciar" da UI
-      // chamar de fora (ver App.jsx).
+      // Exposta em p.restartSimulation para o botão "Reiniciar" (e o
+      // botão "Aplicar tamanho") da UI chamarem de fora (ver App.jsx).
       function restart() {
-        grid = new Grid();
+        const { rows, cols } = gridSizeRef.current;
+        p.resizeCanvas(cols * CELL_SIZE, rows * CELL_SIZE);
+
+        grid = new Grid(rows, cols);
+        grid.generate(p); // Perlin noise precisa de `p` (p.noise, p.noiseSeed)
+
+        onUnreachable?.(false); // limpa qualquer aviso de comida inalcançável do mapa anterior
         spawnAgent();  // passo 3
         spawnFood();   // passos 4 e 5 (e dispara a busca, passo 6)
       }
@@ -138,8 +145,12 @@ export function useP5Sketch({ containerRef, algorithmRef, onFoodCollected }) {
             agent.setPath(path); // passo 7 -> 8
             state = STATE.MOVING;
           } else {
-            // objetivo inalcançável (comida cercada de obstáculos)
+            // Objetivo inalcançável (comida cercada de obstáculos). O
+            // professor confirmou que isso é esperado e não precisa de
+            // tratamento automático — só avisamos na UI e o usuário
+            // resolve clicando em "Reiniciar" (gera um mapa novo).
             state = STATE.NO_PATH;
+            onUnreachable?.(true);
           }
         }
       }
