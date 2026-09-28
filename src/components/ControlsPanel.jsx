@@ -11,7 +11,6 @@ export default function ControlsPanel({
   selectedAlgorithm,
   onAlgorithmChange,
   onRestart,
-  foodsCollected,
   isAutoPlay,
   onToggleAutoPlay,
   onStepOnce,
@@ -24,13 +23,13 @@ export default function ControlsPanel({
   isUnreachable,
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-4 rounded-lg bg-neutral-800 px-4 py-3 shadow-md">
-      <label className="flex items-center gap-2 text-sm text-neutral-200">
-        Algoritmo de busca:
+    <div className="grid grid-cols-[minmax(190px,1.15fr)_minmax(140px,.85fr)_minmax(0,5fr)] items-start gap-2.5 border border-[#30352d] bg-[#171a15] p-3 max-[1000px]:grid-cols-[minmax(180px,1.2fr)_minmax(130px,.85fr)] max-[1000px]:gap-2.5 max-[720px]:grid-cols-2">
+      <label className="flex min-w-0 flex-col gap-1.5 max-[720px]:col-span-full">
+        <span className="font-['DM_Mono',monospace] text-[9px] tracking-[.7px] text-[#9da296]">01 / SEARCH ALGORITHM</span>
         <select
           value={selectedAlgorithm}
           onChange={(e) => onAlgorithmChange(e.target.value)}
-          className="rounded-md border border-neutral-600 bg-neutral-700 px-3 py-1.5 text-sm text-neutral-50 hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="h-9.25 min-w-0 border border-[#343a31] bg-[#10120f] px-2.5 font-['DM_Mono',monospace] text-[11px] text-[#f1f0e9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#66baff]"
         >
           {Object.entries(ALGORITHMS).map(([key, { label, implemented }]) => (
             <option key={key} value={key}>
@@ -40,96 +39,91 @@ export default function ControlsPanel({
         </select>
       </label>
 
-      <div className="flex items-center gap-2 rounded-md border border-neutral-600 bg-neutral-900/40 px-2 py-1">
-        <label className="flex items-center gap-1 text-sm text-neutral-200">
-          Linhas:
+      <div className="flex min-w-0 flex-col gap-1.5">
+        <span className="font-['DM_Mono',monospace] text-[9px] tracking-[.7px] text-[#9da296]">02 / GRID SIZE</span>
+        <div className="flex gap-1.5 max-[720px]:items-end">
+        <label className="flex items-center gap-1.25 font-['DM_Mono',monospace] text-[9px] text-[#888d83] max-[720px]:flex-1">
+          Y
           <input
             type="number"
             min={MIN_GRID_SIZE}
             max={MAX_GRID_SIZE}
             value={rows}
             onChange={(e) => onRowsChange(Number(e.target.value))}
-            className="w-16 rounded-md border border-neutral-600 bg-neutral-700 px-2 py-1 text-sm text-neutral-50 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="h-9.25 w-13.5 min-w-0 border border-[#343a31] bg-[#10120f] px-2.5 font-['DM_Mono',monospace] text-[11px] text-[#f1f0e9] max-[720px]:w-full"
           />
         </label>
-        <label className="flex items-center gap-1 text-sm text-neutral-200">
-          Colunas:
+        <label className="flex items-center gap-1.25 font-['DM_Mono',monospace] text-[9px] text-[#888d83] max-[720px]:flex-1">
+          X
           <input
             type="number"
             min={MIN_GRID_SIZE}
             max={MAX_GRID_SIZE}
             value={cols}
             onChange={(e) => onColsChange(Number(e.target.value))}
-            className="w-16 rounded-md border border-neutral-600 bg-neutral-700 px-2 py-1 text-sm text-neutral-50 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="h-9.25 w-13.5 min-w-0 border border-[#343a31] bg-[#10120f] px-2.5 font-['DM_Mono',monospace] text-[11px] text-[#f1f0e9] max-[720px]:w-full"
           />
         </label>
+        </div>
+      </div>
+      <div className="grid grid-cols-5 gap-x-2.5 gap-y-1.5 max-[1000px]:col-span-full max-[720px]:grid-cols-2">
+        <div className="col-span-full flex items-center gap-2 font-['DM_Mono',monospace] text-[9px] tracking-[.7px]">
+          <span className="text-[#9da296]">03 / CONTROL PANEL</span>
+        </div>
         <button
           type="button"
           onClick={onApplyGridSize}
           title={`Gera um mapa novo com esse tamanho (entre ${MIN_GRID_SIZE} e ${MAX_GRID_SIZE})`}
-          className="rounded-md bg-neutral-700 px-3 py-1.5 text-sm text-neutral-50 hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="flex h-10 min-w-0 items-center justify-center whitespace-nowrap border border-[#40463b] bg-[#242820] px-3 font-['DM_Mono',monospace] text-[10px] text-[#66baff] transition hover:-translate-y-px hover:border-[#66baff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#66baff]"
         >
-          Aplicar tamanho
+          APPLY GRID
         </button>
-      </div>
 
-      <button
-        type="button"
-        onClick={onRestart}
-        className="rounded-md border border-neutral-600 bg-neutral-700 px-3 py-1.5 text-sm text-neutral-50 hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-      >
-        Reiniciar (novo mapa)
-      </button>
+        <button
+          type="button"
+          onClick={onRestart}
+          className="flex h-10 min-w-0 items-center justify-center whitespace-nowrap border border-[#66baff] bg-[#66baff] px-3 font-['DM_Mono',monospace] text-xs font-semibold text-[#10120f] shadow-[0_0_16px_#66baff33] transition hover:-translate-y-px hover:bg-[#8dccff] hover:shadow-[0_0_22px_#66baff55] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#66baff] max-[720px]:col-span-full max-[720px]:w-full"
+        >
+          ↻ NEW MAP
+        </button>
 
-      <div className="flex items-center gap-2 rounded-md border border-neutral-600 bg-neutral-900/40 px-2 py-1">
+        <div className="col-span-3 flex gap-2.5 max-[720px]:col-span-full">
         <button
           type="button"
           onClick={onStepOnce}
           disabled={isAutoPlay}
           title="Avança um único passo da busca (uma célula expandida)"
-          className="rounded-md bg-neutral-700 px-3 py-1.5 text-sm text-neutral-50 hover:bg-neutral-600 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="h-10 min-w-0 flex-1 whitespace-nowrap border border-[#40463b] bg-[#242820] px-2.5 font-['DM_Mono',monospace] text-[10px] text-[#f1f0e9] transition hover:-translate-y-px hover:border-[#66baff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#66baff] disabled:cursor-not-allowed disabled:opacity-40"
         >
-          ⏭ Passo seguinte
+          STEP →
         </button>
 
         <button
           type="button"
           onClick={onToggleAutoPlay}
           title="Liga/desliga o avanço automático da busca"
-          className={`rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-            isAutoPlay
-              ? 'bg-emerald-600 text-white hover:bg-emerald-500'
-              : 'bg-neutral-700 text-neutral-50 hover:bg-neutral-600'
-          }`}
+          className={`h-10 min-w-0 flex-1 whitespace-nowrap border bg-[#242820] px-2.5 font-['DM_Mono',monospace] text-[10px] transition hover:-translate-y-px hover:border-[#66baff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#66baff] ${isAutoPlay ? 'border-[#66baff] text-[#66baff]' : 'border-[#40463b] text-[#f1f0e9]'}`}
         >
-          {isAutoPlay ? '⏸ Autoplay: ON' : '▶ Autoplay: OFF'}
+          {isAutoPlay ? 'Ⅱ PAUSE' : '▶ AUTO'}
         </button>
 
         <button
           type="button"
           onClick={onFinishSearch}
           title="Pula direto para o resultado final da busca, sem animar"
-          className="rounded-md bg-neutral-700 px-3 py-1.5 text-sm text-neutral-50 hover:bg-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="h-10 min-w-0 flex-1 whitespace-nowrap border border-[#40463b] bg-[#242820] px-2.5 font-['DM_Mono',monospace] text-[10px] text-[#f1f0e9] transition hover:-translate-y-px hover:border-[#66baff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#66baff]"
         >
-          ⏩ Concluir busca
+          SKIP →
         </button>
       </div>
-
-      <span className="text-sm text-neutral-300">
-        Comidas coletadas: <span className="font-semibold text-emerald-400">{foodsCollected}</span>
-      </span>
+      </div>
 
       {!ALGORITHMS[selectedAlgorithm]?.implemented && (
-        <span className="rounded-md bg-amber-900/40 px-2 py-1 text-xs text-amber-300">
-          ⚠ Esse algoritmo ainda é só um esqueleto com TODO (veja
-          src/engine/search/{selectedAlgorithm}.js) — a busca vai ficar parada na célula inicial até ser implementado.
-        </span>
+        <p className="col-span-full m-0 font-['DM_Mono',monospace] text-[10px] leading-normal text-[#ffc477]">! {ALGORITHMS[selectedAlgorithm].label} is a placeholder. Search is currently implemented for BFS only.</p>
       )}
 
       {isUnreachable && (
-        <span className="rounded-md bg-red-900/50 px-2 py-1 text-xs text-red-300">
-          ⚠ A comida ficou cercada de obstáculos e não tem caminho até o agente. Clique em "Reiniciar" pra sortear um mapa novo.
-        </span>
+        <p className="col-span-full m-0 font-['DM_Mono',monospace] text-[10px] leading-normal text-[#ff8970]">! TARGET UNREACHABLE / Generate a new map to continue.</p>
       )}
     </div>
   );

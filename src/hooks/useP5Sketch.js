@@ -41,12 +41,13 @@ const STATE = {
   NO_PATH: 'NO_PATH',
 };
 
-export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCollected, onUnreachable }) {
+export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCollected, onUnreachable, onTelemetry }) {
   const p5InstanceRef = useRef(null);
 
   useEffect(() => {
     const sketch = (p) => {
       let grid, agent, food, state, searchGenerator;
+      let lastReportedCell;
 
       // Controla se a busca avança sozinha a cada frame (autoplay) ou só
       // quando o usuário clica em "Passo seguinte". Começa pausado (false)
@@ -113,6 +114,17 @@ export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCol
       }
       p.restartSimulation = restart;
 
+      function publishTelemetry() {
+        if (!grid || !agent || !food) return;
+        onTelemetry?.({
+          seed: grid.seed,
+          agent: { row: agent.currentCell.row, col: agent.currentCell.col },
+          target: { row: food.cell.row, col: food.cell.col },
+          visited: grid.cells.reduce((count, row) => count + row.filter((cell) => cell.visited).length, 0),
+          status: state,
+        });
+      }
+
       function spawnAgent() {
         agent = new Agent(grid.getRandomWalkableCell());
       }
@@ -120,6 +132,8 @@ export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCol
       function spawnFood() {
         food = new Food(grid.getRandomWalkableCell());
         startSearch();
+        lastReportedCell = agent.currentCell;
+        publishTelemetry();
       }
 
       // Passos 6 e 7: dispara a busca do algoritmo atualmente
@@ -153,10 +167,15 @@ export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCol
             onUnreachable?.(true);
           }
         }
+        publishTelemetry();
       }
 
       function stepMovement() {
         agent.update();
+        if (agent.currentCell !== lastReportedCell) {
+          lastReportedCell = agent.currentCell;
+          publishTelemetry();
+        }
         checkFoodCollision();
       }
 
@@ -170,22 +189,20 @@ export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCol
       }
     };
 
-    // Corrige um efeito colateral do React StrictMode (só em desenvolvimento):
-    // ele monta/desmonta/remonta o componente de propósito pra pegar bugs de
-    // "cleanup", e isso pode deixar o canvas antigo meio "grudado" no DOM
-    // por uma fração de segundo antes do cleanup remover de fato. Limpando
-    // o container manualmente aqui garantimos que nunca sobra canvas duplicado,
-    // independente da ordem exata de mount/unmount do StrictMode.
-    if (containerRef.current) {
-      containerRef.current.innerHTML = '';
-    }
+    let instance = null;
+    let cancelled = false;
 
-    const instance = new p5(sketch, containerRef.current);
-    p5InstanceRef.current = instance;
+    queueMicrotask(() => {
+      if (cancelled || !containerRef.current) return;
+      containerRef.current.replaceChildren();
+      instance = new p5(sketch, containerRef.current);
+      p5InstanceRef.current = instance;
+    });
 
     return () => {
-      instance.remove();
-      p5InstanceRef.current = null;
+      cancelled = true;
+      instance?.remove();
+      if (p5InstanceRef.current === instance) p5InstanceRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // roda só uma vez: o sketch lê algorithmRef.current dinamicamente, não precisa recriar a instância quando o algoritmo muda
