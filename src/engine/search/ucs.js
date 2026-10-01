@@ -16,8 +16,26 @@ export function* ucs(grid, startCell, goalCell) {
   frontier.enqueue(startCell, startCell.g);
 
   while (!frontier.isEmpty()) {
-    // TODO: tirar da fila o elemento de MENOR g (frontier.dequeue() já faz isso)
-    const current = null; // <- substituir
+    const current = frontier.dequeue();
+
+    if (current.visited) continue;
+    current.visited = true;
+    current.inFrontier = false;
+
+    if (current === goalCell) {
+      return { found: true, path: reconstructPath(goalCell) };
+    }
+
+    for (const neighbor of current.getNeighbors(grid)) {
+      if (!neighbor.walkable || neighbor.visited) continue;
+
+      if (!neighbor.inFrontier) {
+        neighbor.parent = current;
+        neighbor.g = current.g + neighbor.cost;
+        neighbor.inFrontier = true;
+        frontier.enqueue(neighbor, neighbor.g);
+      }
+    }
 
     yield;
   }
