@@ -91,8 +91,8 @@ const styles = {
 const projectAuthors = [
   { handle: 'clfm', name: 'Cleber Lucas Farias' },
   { handle: 'jlas2', name: 'Juliana Luiza de Andrade' },
-  { handle: 'less', name: 'Lucas Emanuel Sabino' },
-  { handle: 'mfss2', name: 'Maurício Andrey da Silva' },
+  { handle: 'lessl', name: 'Lucas Emanuel Sabino' },
+  { handle: 'mass4', name: 'Maurício Andrey da Silva' },
   { handle: 'vpbm', name: 'Victória Pessoa Barbosa' },
 ];
 
