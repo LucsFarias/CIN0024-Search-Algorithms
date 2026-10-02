@@ -45,14 +45,39 @@ export const TERRAIN_COST = {
 export const NOISE_SCALE = 0.08;
 
 // Faixas de valor de ruído (0 a 1) que definem qual terreno aparece.
-// Ex: ruído abaixo de 0.34 -> obstáculo; entre 0.34 e 0.55 -> areia; etc.
-// Tudo acima de mudMax vira água. Ajustem esses números pra controlar a
-// proporção de cada terreno no mapa final.
+// noise < sandMax -> SAND
+// sandMax <= noise < mudMax -> MUD
+// mudMax <= noise -> WATER
 export const TERRAIN_NOISE_THRESHOLDS = {
-  obstacleMax: 0.34,
-  sandMax: 0.55,
-  mudMax: 0.75,
+  sandMax: 0.45,
+  mudMax: 0.55,
 };
+
+// Obstáculos
+// Os obstáculos são gerados separadamente dos terrenos.
+// Isso permite colocar paredes/manchas no interior do mapa,
+// tornando a busca mais interessante, sem depender das regiões
+// de valor baixo do Perlin Noise.
+
+// Quantidade de regiões de obstáculos que tentaremos criar:
+// Em casos em que não seja possível adicionar todas sem desconectar
+// o mapa, o número final pode ser menor.
+export const OBSTACLE_BLOB_COUNT = 5;
+
+// Cada obstáculo é criado como uma pequena região (blob):
+// Esses valores controlam o tamanho mínimo e máximo da região.
+export const OBSTACLE_MIN_RADIUS = 1;
+export const OBSTACLE_MAX_RADIUS = 3;
+
+// Mantém o centro dos obstáculos afastado da borda:
+// Isso reduz a tendência de todas as paredes ficarem grudadas
+// nos cantos do mapa.
+export const OBSTACLE_EDGE_CLEARANCE = 1;
+
+// Número máximo de tentativas para colocar cada blob:
+// Uma tentativa pode ser rejeitada quando a nova parede divide
+// o mapa em duas regiões que não conseguem se comunicar.
+export const OBSTACLE_GENERATION_ATTEMPTS = 30;
 
 // Cores de cada terreno
 export const TERRAIN_COLOR = {
