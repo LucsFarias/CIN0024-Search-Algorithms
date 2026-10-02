@@ -16,7 +16,7 @@ export const ALGORITHMS = {
   dfs: { label: 'Profundidade (DFS)', run: dfs, implemented: true },
   ucs: { label: 'Custo Uniforme (UCS)', run: ucs, implemented: true },
   greedy: { label: 'Gulosa (Greedy)', run: greedy, implemented: false },
-  astar: { label: 'A*', run: astar, implemented: false },
+  astar: { label: 'A*', run: astar, implemented: true },
 };
 
 // BFS é o único totalmente implementado
