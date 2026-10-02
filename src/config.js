@@ -66,8 +66,8 @@ export const OBSTACLE_BLOB_COUNT = 5;
 
 // Cada obstáculo é criado como uma pequena região (blob):
 // Esses valores controlam o tamanho mínimo e máximo da região.
-export const OBSTACLE_MIN_RADIUS = 1;
-export const OBSTACLE_MAX_RADIUS = 3;
+export const OBSTACLE_MIN_RADIUS = 2;
+export const OBSTACLE_MAX_RADIUS = 5;
 
 // Mantém o centro dos obstáculos afastado da borda:
 // Isso reduz a tendência de todas as paredes ficarem grudadas
