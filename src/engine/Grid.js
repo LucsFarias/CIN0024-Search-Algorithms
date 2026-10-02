@@ -25,7 +25,8 @@ export default class Grid {
     // mesmo mapa). Sorteamos uma seed nova aqui pra cada chamada de
     // generate() produzir um mapa diferente — é isso que garante que
     // "Reiniciar" realmente gera um mapa novo.
-    p.noiseSeed(Math.floor(Math.random() * 100000));
+    this.seed = Math.floor(Math.random() * 100000);
+    p.noiseSeed(this.seed);
 
     this.cells = [];
     for (let row = 0; row < this.rows; row++) {

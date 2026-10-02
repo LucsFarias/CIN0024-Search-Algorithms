@@ -8,7 +8,7 @@ export default function SimulationCanvas({ containerRef }) {
   return (
     <div
       ref={containerRef}
-      className="overflow-hidden rounded-md border-2 border-neutral-700 shadow-lg"
+      className="max-w-full overflow-hidden border border-[#52584b] shadow-lg leading-none max-md:w-full [&>canvas]:block [&>canvas]:h-auto [&>canvas]:max-w-full max-md:[&>canvas]:w-full max-md:[&>canvas]:h-auto!"
     />
   );
 }
