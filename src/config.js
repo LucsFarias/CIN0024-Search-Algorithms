@@ -9,11 +9,11 @@
 // ControlsPanel/App) — os valores abaixo são só o ponto de partida e os
 // limites aceitos, pra evitar grids grandes demais (lentas de renderizar)
 // ou pequenas demais (sem espaço pra busca fazer sentido).
-export const DEFAULT_COLS = 15;
-export const DEFAULT_ROWS = 10;
+export const DEFAULT_COLS = 25;
+export const DEFAULT_ROWS = 25;
 export const MIN_GRID_SIZE = 5;
 export const MAX_GRID_SIZE = 60;
-export const CELL_SIZE = 24;
+export const CELL_SIZE = 25;
 
 // --- Tipos de terreno ---
 export const TERRAIN = {
