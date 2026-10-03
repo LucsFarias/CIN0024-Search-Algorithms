@@ -46,7 +46,7 @@ export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCol
 
   useEffect(() => {
     const sketch = (p) => {
-      let grid, agent, food, state, searchGenerator;
+      let grid, agent, food, state, searchGenerator, agentImage;
       let lastReportedCell;
 
       // Controla se a busca avança sozinha a cada frame (autoplay) ou só
@@ -58,6 +58,9 @@ export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCol
       p.setup = () => {
         const { rows, cols } = gridSizeRef.current;
         p.createCanvas(cols * CELL_SIZE, rows * CELL_SIZE);
+        p.loadImage('/pibble.png', (image) => {
+          agentImage = image;
+        });
         restart();
       };
 
@@ -72,7 +75,7 @@ export function useP5Sketch({ containerRef, algorithmRef, gridSizeRef, onFoodCol
         }
 
         food.show(p);
-        agent.show(p);
+        agent.show(p, agentImage);
       };
 
       // --- Controles expostos para o React chamar de fora (ver App.jsx) ---

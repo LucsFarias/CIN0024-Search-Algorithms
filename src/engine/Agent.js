@@ -55,11 +55,16 @@ export default class Agent {
     }
   }
 
-  show(p) {
+  show(p, image) {
     p.push();
-    p.noStroke();
-    p.fill('#ff3b30');
-    p.circle(this.x, this.y, CELL_SIZE * 0.6);
+    if (image?.width) {
+      p.imageMode(p.CENTER);
+      p.image(image, this.x, this.y, CELL_SIZE * 3, CELL_SIZE * 3);
+    } else {
+      p.noStroke();
+      p.fill('#ff3b30');
+      p.circle(this.x, this.y, CELL_SIZE * 0.6);
+    }
     p.pop();
   }
 }
