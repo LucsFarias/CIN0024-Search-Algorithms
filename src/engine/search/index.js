@@ -15,7 +15,7 @@ export const ALGORITHMS = {
   bfs: { label: 'Largura (BFS)', run: bfs, implemented: true },
   dfs: { label: 'Profundidade (DFS)', run: dfs, implemented: false },
   ucs: { label: 'Custo Uniforme (UCS)', run: ucs, implemented: false },
-  greedy: { label: 'Gulosa (Greedy)', run: greedy, implemented: false },
+  greedy: { label: 'Gulosa (Greedy)', run: greedy, implemented: true },
   astar: { label: 'A*', run: astar, implemented: false },
 };
 
