@@ -15,17 +15,25 @@ export function* dfs(grid, startCell, goalCell) {
   frontier.push(startCell);
 
   while (frontier.length > 0) {
-    // TODO: remover o próximo nó a expandir (pop = pilha/LIFO)
-    const current = null; // <- substituir
+    const current = frontier.pop(); 
 
-    // TODO: marcar como visitado, tirar da fronteira
+    if (current.visited) continue;
+    current.visited = true;
+    current.inFrontier = false;
 
-    // TODO: se current === goalCell -> return { found: true, path: reconstructPath(goalCell) }
+    if (current === goalCell) {
+      return { found: true, path: reconstructPath(goalCell) };
+    }
 
-    // TODO: para cada vizinho caminhável e não visitado ainda:
-    //         - definir parent
-    //         - marcar inFrontier = true
-    //         - empilhar
+    for (const neighbor of current.getNeighbors(grid)) {
+      if (!neighbor.walkable || neighbor.visited) continue;
+
+      if (!neighbor.inFrontier) {
+        neighbor.parent = current;
+        neighbor.inFrontier = true;
+        frontier.push(neighbor);
+      }
+    }
 
     yield;
   }

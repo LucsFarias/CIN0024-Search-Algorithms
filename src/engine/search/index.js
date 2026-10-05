@@ -13,10 +13,10 @@ import { astar } from './astar.js';
 
 export const ALGORITHMS = {
   bfs: { label: 'Largura (BFS)', run: bfs, implemented: true },
-  dfs: { label: 'Profundidade (DFS)', run: dfs, implemented: false },
-  ucs: { label: 'Custo Uniforme (UCS)', run: ucs, implemented: false },
+  dfs: { label: 'Profundidade (DFS)', run: dfs, implemented: true },
+  ucs: { label: 'Custo Uniforme (UCS)', run: ucs, implemented: true },
   greedy: { label: 'Gulosa (Greedy)', run: greedy, implemented: true },
-  astar: { label: 'A*', run: astar, implemented: false },
+  astar: { label: 'A*', run: astar, implemented: true },
 };
 
 // BFS é o único totalmente implementado
