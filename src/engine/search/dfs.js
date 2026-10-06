@@ -1,42 +1,54 @@
-// =============================================================
-//
-// É praticamente idêntica ao bfs.js, com UMA diferença:
-// - BFS usa `frontier.shift()` (remove do INÍCIO -> fila, FIFO)
-// - DFS usa `frontier.pop()`   (remove do FIM -> pilha, LIFO)
-//
-// Copiem a estrutura de bfs.js e troquem shift() por pop() como
-// ponto de partida
+// 
+
 import { reconstructPath } from './search-utils.js';
 
 export function* dfs(grid, startCell, goalCell) {
-  const frontier = [];
   startCell.g = 0;
-  startCell.inFrontier = true;
-  frontier.push(startCell);
 
-  while (frontier.length > 0) {
-    const current = frontier.pop(); 
+  function* visit(current) {
+    if (current.visited) return false;
 
-    if (current.visited) continue;
     current.visited = true;
     current.inFrontier = false;
 
     if (current === goalCell) {
-      return { found: true, path: reconstructPath(goalCell) };
+      return true;
     }
 
-    for (const neighbor of current.getNeighbors(grid)) {
-      if (!neighbor.walkable || neighbor.visited) continue;
+    const neighbors = current.getNeighbors(grid);
 
-      if (!neighbor.inFrontier) {
-        neighbor.parent = current;
-        neighbor.inFrontier = true;
-        frontier.push(neighbor);
+    for (const neighbor of neighbors) {
+      if (!neighbor.walkable || neighbor.visited) {
+        continue;
+      }
+
+      neighbor.parent = current;
+      neighbor.g = current.g + neighbor.cost;
+      neighbor.inFrontier = true;
+
+      yield;
+
+      const found = yield* visit(neighbor);
+
+      if (found) {
+        return true;
       }
     }
 
-    yield;
+    return false;
   }
 
-  return { found: false, path: [] };
+  const found = yield* visit(startCell);
+
+  if (found) {
+    return {
+      found: true,
+      path: reconstructPath(goalCell)
+    };
+  }
+
+  return {
+    found: false,
+    path: []
+  };
 }
