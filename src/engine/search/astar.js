@@ -12,13 +12,18 @@
 // =============================================================
 
 import { PriorityQueue, heuristic, reconstructPath } from './search-utils.js';
+import { TERRAIN_COST } from '../../config.js';
+
+const MIN_TERRAIN_COST = Math.min(
+  ...Object.values(TERRAIN_COST).filter(Number.isFinite),
+);
 
 export function* astar(grid, startCell, goalCell) {
   const frontier = new PriorityQueue();
 
   // Inicializa a célula inicial
   startCell.g = 0;
-  startCell.h = heuristic(startCell, goalCell);
+  startCell.h = heuristic(startCell, goalCell) * MIN_TERRAIN_COST;
   startCell.f = startCell.g + startCell.h;
 
   startCell.inFrontier = true;
@@ -60,7 +65,7 @@ export function* astar(grid, startCell, goalCell) {
         neighbor.parent = current;
 
         neighbor.g = tentativeG;
-        neighbor.h = heuristic(neighbor, goalCell);
+        neighbor.h = heuristic(neighbor, goalCell) * MIN_TERRAIN_COST;
         neighbor.f = neighbor.g + neighbor.h;
 
         neighbor.inFrontier = true;
